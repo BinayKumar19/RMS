@@ -42,82 +42,29 @@ def pre_processing(y):
     y[:, 1] = imputer.transform(y[:, 1])
     return y
 
-def fit_model(x_tran, y_tran, x_val):
+def fit_model(x_tran, y_tran):
     # Fitting Decision Tree Regression to the dataset
     regressor = DecisionTreeRegressor(random_state = 0)
     regressor.fit(x_tran, y_tran)
 
+    return regressor
 
-    # # Visualising the Decision Tree Regression results (higher resolution)
-    # X_grid = np.arange(min(x_tran[:,3]), max(x_tran[:,3]), 0.01)
-    # X_grid = X_grid.reshape((len(X_grid), 1))
-    # plt.scatter(x_tran[:,3], y_tran, color='red')
-    # plt.plot(X_grid, regressor.predict(x_tran), color='blue')
-    # plt.title('Truth or Bluff (Decision Tree Regression)')
-    # plt.xlabel('Position level')
-    # plt.ylabel('Salary')
-    # plt.show()
-
-    # Predicting a new result
-    y_pred = regressor.predict(x_val)
-    return y_pred
 
 x, y = load_data()
 X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
-print(y_test.shape)
-
 [y_rows] = y_test.shape
-print(y_rows)
-
-#print(y[977])
-#y = pre_processing(y)
-y_cal = fit_model(X_train, y_train, X_test)
-
-diff = 0;
-for i in range(0,y_rows):
-    diff = y_cal - y_test
-
-avg_diff = sum(diff)/y_rows
-
-print(avg_diff)
-#print(y_cal)
 
 
-# x_rows, x_columns = X.shape
-# x_tran = np.zeros(shape = (0, 7))
-# y_tran = np.zeros(shape = (0, 1))
-# x_val = np.zeros(shape = (0, 7))
-# y_val = np.zeros(shape = (0, 1))
+regressor = fit_model(X_train, y_train)
 
+y_train_cal = regressor.predict(X_train)
+rms = sqrt(mean_squared_error(y_train, y_train_cal))
+print(rms)
 
+# Predicting a new result
+y_pred = regressor.predict(X_test)
 
-# for i in range(0, x_rows):
-#         datetime_object = datetime.strptime(X[i, 1], '%m/%d/%Y')
-#         dateComponents = np.array([datetime_object.year, datetime_object.month, datetime_object.day])
-#         if str(datetime_object.year) == '2016':
-#             x_tran = np.vstack((x_tran, np.hstack((X[i, 0], dateComponents, X[i, 2:5]))))
-#             y_tran = np.vstack((y_tran, y[i]))
-#         else:
-#             x_val = np.vstack((x_val, np.hstack((X[i, 0], dateComponents, X[i, 2:5]))))
-#             y_val = np.vstack((y_val, y[i]))
+rms = sqrt(mean_squared_error(y_test, y_pred))
 
-# print(X.shape)
-# print(x_tran.shape)
-# print(x_val.shape)
-# print(y_tran.shape)
-# print(y_val.shape)
-#
-#
-#
-#
-# # Visualising the Decision Tree Regression results (higher resolution)
-# X_grid = np.arange(min(x_tran), max(x_tran), 0.01)
-# X_grid = X_grid.reshape((len(X_grid), 1))
-# plt.scatter(x_tran, y_tran, color = 'red')
-# plt.plot(X_grid, regressor.predict(X_grid), color = 'blue')
-# plt.title('Truth or Bluff (Decision Tree Regression)')
-# plt.xlabel('Position level')
-# plt.ylabel('Salary')
-# plt.show()
-
+print(rms)

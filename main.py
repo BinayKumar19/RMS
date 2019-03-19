@@ -5,6 +5,8 @@ from datetime import datetime
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.preprocessing import Imputer
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from math import sqrt
 
 
 #Importing the dataSet
@@ -62,16 +64,23 @@ def fit_model(x_tran, y_tran, x_val):
 
 x, y = load_data()
 X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
-print(x.shape)
-print(x[977,:])   #- 1453
-print(x[1453,:]) #- 1008
+
+print(y_test.shape)
+
+[y_rows] = y_test.shape
+print(y_rows)
 
 #print(y[977])
 #y = pre_processing(y)
-y_cal = fit_model(x, y, x)
+y_cal = fit_model(X_train, y_train, X_test)
 
+diff = 0;
+for i in range(0,y_rows):
+    diff = y_cal - y_test
 
+avg_diff = sum(diff)/y_rows
 
+print(avg_diff)
 #print(y_cal)
 
 

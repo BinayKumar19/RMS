@@ -45,22 +45,22 @@ def pre_processing(dataset, result_dimension):
     return dataset
 
 
-def display_result(result_dimension, dataset_val2, dataset_test, predictions_val):
+def display_result(result_dimension, dataset_2016, dataset_2017, predictions_val):
     plt.figure(figsize=(16, 8))
     if result_dimension == '1':
-        dataset_val2 = dataset_val2.resample('M').sum()
-        dataset_test = dataset_test.resample('M').sum()
+        dataset_2016 = dataset_2016.resample('M').sum()
+        dataset_2017 = dataset_2017.resample('M').sum()
         predictions_val = predictions_val.resample('M').sum()
-        ax = dataset_val2.plot(label='2016')
-        ax = dataset_test.plot(label='2017')
+        ax = dataset_2016.plot(label='2016')
+        ax = dataset_2017.plot(label='2017')
         predictions_val.plot(ax=ax, label='Predicted Test', alpha=.7, figsize=(14, 7))
     elif result_dimension == '2':
-        dataset_test = pd.concat([dataset_test, predictions_val, dataset_val2])
-        dataset_test = dataset_test.resample('Y').sum()
-        ax = dataset_test.plot(label='Booking')
+        predictions_val = pd.concat([dataset_2017, predictions_val, dataset_2016])
+        predictions_val = predictions_val.resample('Y').sum()
+        ax = predictions_val.plot(label='Booking')
     else:
-        ax = dataset_val2.plot(label='2016')
-        ax = dataset_test.plot(label='2017')
+        ax = dataset_2016.plot(label='2016')
+        ax = dataset_2017.plot(label='2017')
         predictions_val.plot(ax=ax, label='Predicted Test', alpha=.7, figsize=(14, 7))
 
     plt.show()
@@ -70,8 +70,8 @@ result_dimension = input("forecast results dimensions?Enter:\n1.Monthly\n2. Year
 dataset = load_dataset()
 dataset = pre_processing(dataset, result_dimension)
 
-dataset_val2 = dataset[0:28]
-dataset_test = dataset[28:55]
+dataset_2016 = dataset[0:28]
+dataset_2017 = dataset[28:55]
 dataset_val = dataset
 
 # m =28 for weeks and 184 for days
@@ -102,12 +102,12 @@ predictions_val = pd.DataFrame(forcast)
 predictions_val['DepartureDate'] = date_list
 predictions_val = predictions_val.set_index('DepartureDate')
 
-display_result(result_dimension, dataset_val2, dataset_test, predictions_val)
+display_result(result_dimension, dataset_2016, dataset_2017, predictions_val)
 
-print(dataset_val2.describe())
-print(dataset_test.describe())
+print(dataset_2016.describe())
+print(dataset_2017.describe())
 print(predictions_val.describe())
 
-print('sum in 2016 is ' + str(dataset_val2.sum()))
-print('sum in 2017 is ' + str(dataset_test.sum()))
+print('sum in 2016 is ' + str(dataset_2016.sum()))
+print('sum in 2017 is ' + str(dataset_2017.sum()))
 print('sum in 2018 is ' + str(predictions_val.sum()))

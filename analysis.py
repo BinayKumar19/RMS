@@ -57,10 +57,6 @@ if result_dimension == '1':
     dataset = dataset[dataset != 0]
     dataset_val2 = dataset[0:6]
     dataset_test = dataset[6:]
-elif result_dimension == '2':
-    dataset = dataset.resample('Y').sum()
-    dataset_val2 = dataset[0:1]
-    dataset_test = dataset[1:]
 else:
     dataset = dataset.resample('Y').sum()
     dataset_val2 = dataset[0:1]

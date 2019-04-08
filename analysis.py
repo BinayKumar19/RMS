@@ -1,7 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from pmdarima.arima import auto_arima
-import datetime as d
 
 def load_dataset():
     dataset_flight_info = pd.read_csv('Data_test_Analytics.csv')
@@ -42,9 +40,6 @@ def pre_processing(dataset, result_dimension):
     dataset["DepartureDate"] = pd.to_datetime(dataset["DepartureDate"])
     dataset = dataset.dropna(axis=0)
     dataset = dataset.sort_values('DepartureDate')
-    #dataset.isnull().sum()
-    #dataset = dataset.dropna(axis=0)
-    #dataset = dataset[dataset > 0]
     return dataset
 
 def display_result(dataset):

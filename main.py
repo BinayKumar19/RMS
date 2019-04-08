@@ -70,8 +70,8 @@ result_dimension = input("forecast results dimensions?Enter:\n1.Monthly\n2. Year
 dataset = load_dataset()
 dataset = pre_processing(dataset, result_dimension)
 
-dataset_2016 = dataset[0:28]
-dataset_2017 = dataset[28:55]
+dataset_2016 = dataset.loc[dataset.index < '2017-01-01 00:00:00']
+dataset_2017 = dataset.loc[dataset.index > '2017-01-01 08:00:00']
 dataset_val = dataset
 
 # m =28 for weeks and 184 for days
